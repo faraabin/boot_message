@@ -45,8 +45,8 @@ static sBootMessage BootMessages[BOOT_MESSAGE_MAX_QTY];
 static uint32_t LastMsgIndex;
 static bool SingleInitFlag = false;
 
-FARAABIN_EVENT_GROUP_DEF_(bootMessageEventGroup);
-FARAABIN_DICT_GROUP_DEF_(bootMessageDictGroup);
+FARAABIN_EVENT_GROUP_DEF_STATIC_(BootMessageEventGroup);
+FARAABIN_DICT_GROUP_DEF_STATIC_(BootMessageDictGroup);
 
 /* Private function prototypes -----------------------------------------------*/
 /* Variables -----------------------------------------------------------------*/
@@ -68,10 +68,10 @@ uint8_t fBootMessage_Init(void) {
     return 1;
   }
 
-  bootMessageEventGroup.enable = true;
-  FARAABIN_EventGroup_Init_(&bootMessageEventGroup, "System");
-  FARAABIN_DictGroup_Init_(&bootMessageDictGroup);
-	FARAABIN_FunctionGroupType_Init_(&bootMessageFuncGroup);
+  BootMessageEventGroup.Enable = true;
+  FARAABIN_EventGroup_Init_WithPath_(&BootMessageEventGroup, "System");
+  FARAABIN_DictGroup_Init_(&BootMessageDictGroup);
+  FARAABIN_FunctionGroupType_Init_(&BootMessageFn);
 
   LastMsgIndex = 0;
   SingleInitFlag = true;
@@ -133,17 +133,18 @@ void fBootMessage_Private_BootAssignResult(uint8_t *src, uint8_t *dst) {
  * @brief 
  * 
  */
-FARAABIN_DICT_GROUP_FUNC_(bootMessageDictGroup) {
+FARAABIN_DICT_GROUP_FUNC_(BootMessageDictGroup) {
 
-  FARAABIN_FUNCTION_GROUP_OBJECT_DICT_(bootMessageFuncGroup, bootMessageEventGroup, "System");
-
+  FARAABIN_FUNCTION_GROUP_OBJECT_DICT_WP_(BootMessageFn, BootMessageEventGroup, "System");
+  
+  FARAABIN_DICT_GROUP_FUNC_END_;
 }
 
 /**
  * @brief 
  * 
  */
-FARAABIN_FUNCTION_(bootMessageFuncGroup, SEND_BOOT_MESSAGES, "help") {
+FARAABIN_FUNCTION_(BootMessageFn, SEND_BOOT_MESSAGES, "help") {
 
   for(int i = 0; i < LastMsgIndex; i++) {
 
@@ -158,17 +159,17 @@ FARAABIN_FUNCTION_(bootMessageFuncGroup, SEND_BOOT_MESSAGES, "help") {
     }
 
   }
-		
-	FARAABIN_FUNCTION_END_();
+    
+  FARAABIN_FUNCTION_END_();
 }
 
 /**
  * @brief 
  * 
  */
-FARAABIN_FUNCTION_GROUP_(bootMessageFuncGroup, "help") {
-	
-  FARAABIN_FUNCTION_GROUP_ADD_(bootMessageFuncGroup, SEND_BOOT_MESSAGES);
+FARAABIN_FUNCTION_GROUP_(BootMessageFn, "help") {
+  
+  FARAABIN_FUNCTION_GROUP_ADD_(BootMessageFn, SEND_BOOT_MESSAGES);
 
 }
 

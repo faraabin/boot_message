@@ -37,31 +37,34 @@ extern "C" {
 #define fBootStart_() uint8_t __boot_result__ = 0
 
 #define fBootRetryResult_(func_, retry_, delayMs_, result_) \
-	do{ \
+  do{ \
     uint8_t __res__ = 0;\
     uint8_t __cnt__ = 0; \
     while(__cnt__ < (retry_)) { \
       tic_();\
       __res__ = (func_);\
-			timeUs_t __elapsed__ = tocUs_();\
-			fBootMessage_Private_BootAssignResult(&__res__, result_);\
-			if(__res__ != 0) {\
-				__boot_result__ = 1;\
-			}\
+      timeUs_t __elapsed__ = tocUs_();\
+      fBootMessage_Private_BootAssignResult(&__res__, result_);\
+      if(__res__ != 0) {\
+        __boot_result__ = 1;\
+      }\
       fBootMessage_AddMessage(#func_, __res__, __elapsed__);\
+      if(__res__ == 0) {\
+        break;\
+      }\
       __cnt__++;\
       fChrono_DelayMs(delayMs_);\
     } \
   }while(0)
 
 #define fBoot_(func_) \
-	fBootRetryResult_(func_, 1, 0, NULL)
+  fBootRetryResult_(func_, 1, 0, NULL)
 
 #define fBootRetry_(func_, retry_, delayMs_) \
-	fBootRetryResult_(func_, retry_, delayMs_, NULL)
+  fBootRetryResult_(func_, retry_, delayMs_, NULL)
 
 #define fBootWithResult_(func_, result_) \
-	fBootRetryResult_(func_, 1, 0, result_) 
+  fBootRetryResult_(func_, 1, 0, result_) 
 
 #define BOOT_RESULT_ __boot_result__
 
@@ -74,7 +77,7 @@ uint8_t fBootMessage_AddMessage(const char *message, uint8_t result, uint32_t ex
 
 void fBootMessage_Private_BootAssignResult(uint8_t *src, uint8_t *dst);
 
-FARAABIN_FUNCTION_GROUP_PROTOTYPE_(bootMessageFuncGroup);
+FARAABIN_FUNCTION_GROUP_PROTOTYPE_(BootMessageFn);
 
 /* Exported variables --------------------------------------------------------*/
 
