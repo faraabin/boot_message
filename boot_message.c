@@ -68,7 +68,7 @@ uint8_t fBootMessage_Init(void) {
     return 1;
   }
 
-  BootMessageEventGroup.Enable = true;
+	FARAABIN_EventGroup_Enable_(&BootMessageEventGroup);
   FARAABIN_EventGroup_Init_WithPath_(&BootMessageEventGroup, "System");
   FARAABIN_DictGroup_Init_(&BootMessageDictGroup);
   FARAABIN_FunctionGroupType_Init_(&BootMessageFn);
@@ -140,6 +140,8 @@ FARAABIN_DICT_GROUP_FUNC_(BootMessageDictGroup) {
   FARAABIN_DICT_GROUP_FUNC_END_;
 }
 
+#if defined(FB_FEATURE_FLAG_MCU_CLI) && defined(FARAABIN_ENABLE)
+
 /**
  * @brief 
  * 
@@ -172,5 +174,7 @@ FARAABIN_FUNCTION_GROUP_(BootMessageFn, "help") {
   FARAABIN_FUNCTION_GROUP_ADD_(BootMessageFn, SEND_BOOT_MESSAGES);
 
 }
+
+#endif
 
 /************************ © COPYRIGHT FaraabinCo *****END OF FILE****/
