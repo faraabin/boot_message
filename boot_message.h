@@ -34,9 +34,9 @@ extern "C" {
 
 /* Exported defines ----------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
-#define fBootStart_() uint8_t __boot_result__ = 0
+#define BOOT_START_() uint8_t __boot_result__ = 0
 
-#define fBootRetryResult_(func_, retry_, delayMs_, result_) \
+#define BOOT_RETRY_RES_(func_, retry_, delayMs_, result_) \
   do{ \
     uint8_t __res__ = 0;\
     uint8_t __cnt__ = 0; \
@@ -57,14 +57,14 @@ extern "C" {
     } \
   }while(0)
 
-#define fBoot_(func_) \
-  fBootRetryResult_(func_, 1, 0, NULL)
+#define BOOT_(func_) \
+  BOOT_RETRY_RES_(func_, 1, 0, NULL)
 
-#define fBootRetry_(func_, retry_, delayMs_) \
-  fBootRetryResult_(func_, retry_, delayMs_, NULL)
+#define BOOT_RETRY_(func_, retry_, delayMs_) \
+  BOOT_RETRY_RES_(func_, retry_, delayMs_, NULL)
 
-#define fBootWithResult_(func_, result_) \
-  fBootRetryResult_(func_, 1, 0, result_) 
+#define BOOT_RES_(func_, result_) \
+  BOOT_RETRY_RES_(func_, 1, 0, result_) 
 
 #define BOOT_RESULT_ __boot_result__
 
