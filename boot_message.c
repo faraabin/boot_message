@@ -46,7 +46,7 @@ static uint32_t LastMsgIndex;
 static bool SingleInitFlag = false;
 
 FARAABIN_EVENT_GROUP_DEF_STATIC_(BootMessageEventGroup);
-FARAABIN_DICT_GROUP_DEF_STATIC_(BootMessageDictGroup);
+FARAABIN_CONTAINER_DEF_STATIC_(BootMessageContainer);
 
 /* Private function prototypes -----------------------------------------------*/
 /* Variables -----------------------------------------------------------------*/
@@ -70,7 +70,7 @@ uint8_t fBootMessage_Init(void) {
 
 	FARAABIN_EventGroup_Enable_(&BootMessageEventGroup);
   FARAABIN_EventGroup_Init_WithPath_(&BootMessageEventGroup, "System");
-  FARAABIN_DictGroup_Init_(&BootMessageDictGroup);
+  FARAABIN_Container_Init_(&BootMessageContainer);
   FARAABIN_FunctionGroupType_Init_(&BootMessageFn);
 
   LastMsgIndex = 0;
@@ -133,11 +133,11 @@ void fBootMessage_Private_BootAssignResult(uint8_t *src, uint8_t *dst) {
  * @brief 
  * 
  */
-FARAABIN_DICT_GROUP_FUNC_(BootMessageDictGroup) {
+FARAABIN_CONTAINER_FUNC_(BootMessageContainer) {
 
   FARAABIN_FUNCTION_GROUP_OBJECT_DICT_WP_(BootMessageFn, BootMessageEventGroup, "System");
   
-  FARAABIN_DICT_GROUP_FUNC_END_;
+  FARAABIN_CONTAINER_FUNC_END_;
 }
 
 #if defined(FB_FEATURE_FLAG_MCU_CLI) && defined(FARAABIN_ENABLE)
